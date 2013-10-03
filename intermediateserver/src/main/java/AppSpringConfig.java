@@ -13,6 +13,16 @@ import com.sun.net.httpserver.HttpHandler;
 @Configuration
 public class AppSpringConfig {
 
+	/* ************* Remote service accessed ************** */
+	@Bean(name = "remotePresetService")
+	public HttpInvokerProxyFactoryBean remotePresetService() {
+		HttpInvokerProxyFactoryBean service = new HttpInvokerProxyFactoryBean();
+		service.setServiceInterface(PresetService.class);
+		String url = "http://127.0.0.1:" + PresetService.PORT_SERVER + PresetService.CONTEXT_ROOT;
+		service.setServiceUrl(url);
+		return service;
+	}
+
 	/* *********** Local service exposed in HTTPInvoker ************ */
 	@Bean
 	public PresetService localPresetService() {
@@ -20,9 +30,14 @@ public class AppSpringConfig {
 	}
 
 	@Bean
+	public PresetService exposedPresetService() {
+		return new PresetServiceRedirector();
+	}
+
+	@Bean
 	public SimpleHttpInvokerServiceExporter serviceExporter() {
 		SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
-		exporter.setService(this.localPresetService());
+		exporter.setService(this.exposedPresetService());
 		exporter.setServiceInterface(PresetService.class);
 		return exporter;
 	}
@@ -30,20 +45,11 @@ public class AppSpringConfig {
 	@Bean
 	public SimpleHttpServerFactoryBean presetService() {
 		Map<String, HttpHandler> contexts = new HashMap<String, HttpHandler>();
-		contexts.put("/remoting/PresetService", serviceExporter());
+		contexts.put(PresetService.CONTEXT_ROOT, serviceExporter());
 		SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
 		serverFactory.setContexts(contexts);
-		serverFactory.setPort(8080);
+		serverFactory.setPort(PresetService.PORT_INTERMEDIATE_SERVER);
 		return serverFactory;
 	}
 
-	/* ************* Remote service accessed ************** */
-	@Bean
-	public HttpInvokerProxyFactoryBean remotePresetService() {
-		HttpInvokerProxyFactoryBean service = new HttpInvokerProxyFactoryBean();
-		service.setServiceInterface(PresetService.class);
-		String url = "http://127.0.0.1:8090/remoting/PresetService";
-		service.setServiceUrl(url);
-		return service;
-	}
 }

@@ -9,7 +9,7 @@ public class IntermediateServerApp {
 
 	private void start() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppSpringConfig.class);
-		Object obj = context.getBean("serverFactory");
+		Object exposedService = context.getBean(PresetServiceRedirector.class);
 
 		while (true) {
 			synchronized (this) {
