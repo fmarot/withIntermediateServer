@@ -11,7 +11,7 @@ public class PresetServiceImpl implements PresetService {
 	@SuppressWarnings(value = { "rawtypes", "unchecked", "serial" })
 	@Override
 	public List<PresetDTO> getAllPresets() {
-		// inner classes are not deserializable by the client
+		// inner classes are not deserializable by the client so we wrap into another 'real' ArrayList
 		return new ArrayList(new ArrayList() {
 			{
 				add(new PresetDTO("preset1"));
@@ -19,5 +19,12 @@ public class PresetServiceImpl implements PresetService {
 				add(new PresetDTO("preset3"));
 			}
 		});
+		/*
+		ArrayList<PresetDTO> allPresets = new ArrayList<PresetDTO>();
+		allPresets.add(new PresetDTO("preset1"));
+		allPresets.add(new PresetDTO("preset2"));
+		allPresets.add(new PresetDTO("preset3"));
+		return allPresets;
+		 */
 	}
 }

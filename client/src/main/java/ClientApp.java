@@ -1,20 +1,17 @@
-import java.util.Map;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+@Slf4j
 public class ClientApp {
-
-	private static final Logger	log	= LoggerFactory.getLogger(ClientApp.class);
 
 	private void start() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppSpringConfig.class);
-		Map<String, IImageService> beansOfType = context.getBeansOfType(IImageService.class);
-		for (IImageService service : beansOfType.values()) {
-			ImageServiceMetaData serviceMetaData = service.getServiceMetaData();
-			log.warn("Service metaData: {}", serviceMetaData);
-		}
+		PresetService presetService = context.getBean(PresetService.class);
+		List<PresetDTO> allPresets = presetService.getAllPresets();
+		log.info("allPresets: {}", allPresets);
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -26,12 +26,12 @@ public class AppSpringConfig {
 	}
 
 	@Bean
-	public SimpleHttpServerFactoryBean serverFactory() {
+	public SimpleHttpServerFactoryBean remotePresetService() {
 		Map<String, HttpHandler> contexts = new HashMap<String, HttpHandler>();
 		contexts.put("/remoting/PresetService", serviceExporter());
 		SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
 		serverFactory.setContexts(contexts);
-		serverFactory.setPort(8090);
+		serverFactory.setPort(8080);
 		return serverFactory;
 	}
 }
