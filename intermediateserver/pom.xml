@@ -18,10 +18,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.teamtter.tests</groupId>
-			<artifactId>presets-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.teamtter.tests</groupId>
 			<artifactId>presets-server</artifactId>
 		</dependency>
 
